@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Viajero Perú — Tus amigos viajeros</title>
+  <meta name="description" content="Agencia de viajes en Perú. Programas de viaje, reservas, tours, boletos de avión y transfers diseñados según tu estilo de viaje." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts: Fredoka = superpop-like rounded display · Inter = readable body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#0371b9',
+              50:  '#eef7fd',
+              100: '#d5ecfa',
+              600: '#0371b9',
+              700: '#025c96',
+              900: '#02385c',
+            },
+          },
+          fontFamily: {
+            display: ['Fredoka', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root { --brand: #0371b9; }
+
+    html, body { -webkit-font-smoothing: antialiased; }
+
+    /* ---- Scroll reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+      transition-delay: var(--d, 0ms);
+      will-change: opacity, transform;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+    }
+
+    /* ---- Hero slow zoom ---- */
+    @keyframes kenburns { from { transform: scale(1.08); } to { transform: scale(1.18); } }
+    .kenburns { animation: kenburns 22s ease-in-out infinite alternate; }
+
+    /* ---- Floating blob ---- */
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+    .floaty { animation: float 7s ease-in-out infinite; }
+
+    /* ---- Nav underline ---- */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: -4px; height: 2px; width: 0;
+      background: var(--brand); transition: width .3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ---- Marquee ---- */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-track { animation: marquee 28s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+
+    ::selection { background: #0371b9; color: #fff; }
+  </style>
+</head>
+
+<body class="font-sans text-slate-700 bg-white antialiased overflow-x-hidden">
+
+  <!-- ===================== HEADER ===================== -->
+  <header id="header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <nav class="mt-4 flex items-center justify-between rounded-2xl bg-white/80 backdrop-blur-md border border-slate-100 shadow-sm px-4 sm:px-6 py-3 transition-all duration-300" id="navbar">
+        <a href="#hero" class="shrink-0">
+          <img src="https://res.cloudinary.com/dmcsf10tz/image/upload/v1787508314/logo/logo2_fhyxsx.png" alt="Team Viajero Perú" class="w-20 object-cover shadow-sm" />
+        </a>
+
+        <!-- Desktop nav -->
+        <ul class="hidden lg:flex items-center gap-8 text-sm font-500 text-slate-600">
+          <li><a href="#about"    class="nav-link" data-i18n="nav.about">Nosotros</a></li>
+          <li><a href="#services" class="nav-link" data-i18n="nav.services">Servicios</a></li>
+          <li><a href="#styles"   class="nav-link" data-i18n="nav.styles">Estilos</a></li>
+          <li><a href="#gallery"  class="nav-link" data-i18n="nav.gallery">Galería</a></li>
+          <li><a href="#contact"  class="nav-link" data-i18n="nav.contact">Contacto</a></li>
+        </ul>
+
+        <div class="flex items-center gap-3">
+          <!-- Language switcher -->
+          <div class="relative" id="langWrap">
+            <button id="langBtn" class="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-600 text-slate-600 hover:border-brand hover:text-brand transition">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+              <span id="langCurrent">ES</span>
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div id="langMenu" class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white border border-slate-100 shadow-lg overflow-hidden">
+              <button data-lang="es" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-brand-50 flex items-center gap-2"><span>🇵🇪</span> Español</button>
+              <button data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-brand-50 flex items-center gap-2"><span>🇬🇧</span> English</button>
+              <button data-lang="pt" class="lang-opt w-full text-left px-4 py-2.5 text-sm hover:bg-brand-50 flex items-center gap-2"><span>🇧🇷</span> Português</button>
+            </div>
+          </div>
+
+          <a href="#contact" class="hidden sm:inline-flex items-center rounded-full bg-brand px-5 py-2 text-sm font-600 text-white shadow-sm shadow-brand/30 hover:bg-brand-700 transition" data-i18n="nav.cta">Planea tu viaje</a>
+
+          <!-- Mobile menu button -->
+          <button id="menuBtn" class="lg:hidden text-slate-700 p-1" aria-label="Menu">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div id="mobileMenu" class="lg:hidden hidden mx-5 mt-2">
+      <ul class="rounded-2xl bg-white border border-slate-100 shadow-lg p-3 text-slate-700 font-500">
+        <li><a href="#about"    class="block px-4 py-3 rounded-xl hover:bg-brand-50" data-i18n="nav.about">Nosotros</a></li>
+        <li><a href="#services" class="block px-4 py-3 rounded-xl hover:bg-brand-50" data-i18n="nav.services">Servicios</a></li>
+        <li><a href="#styles"   class="block px-4 py-3 rounded-xl hover:bg-brand-50" data-i18n="nav.styles">Estilos</a></li>
+        <li><a href="#gallery"  class="block px-4 py-3 rounded-xl hover:bg-brand-50" data-i18n="nav.gallery">Galería</a></li>
+        <li><a href="#contact"  class="block px-4 py-3 rounded-xl hover:bg-brand-50" data-i18n="nav.contact">Contacto</a></li>
+        <li class="pt-2"><a href="#contact" class="block text-center px-4 py-3 rounded-xl bg-brand text-white font-600" data-i18n="nav.cta">Planea tu viaje</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=2070&auto=format&fit=crop"
+           alt="Machu Picchu, Perú" class="kenburns h-full w-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-900/85 via-brand-900/55 to-brand-900/20"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-5 sm:px-8 w-full pt-32 pb-20">
+      <div class="max-w-2xl">
+        <span class="reveal inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur border border-white/20 px-4 py-1.5 text-xs font-600 tracking-wide text-white uppercase" data-i18n="hero.badge">
+          ✦ Solo para viajeros
+        </span>
+
+        <h1 class="reveal mt-6 font-display font-700 text-white text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-7xl" style="--d:80ms">
+          <span data-i18n="hero.title1">Somos tus</span><br />
+          <span class="text-sky-300" data-i18n="hero.title2">amigos viajeros</span>
+        </h1>
+
+        <p class="reveal mt-6 text-lg text-white/85 max-w-xl leading-relaxed" style="--d:180ms" data-i18n="hero.subtitle">
+          Encontramos tu team ideal y creamos experiencias increíbles en Perú, diseñadas a la medida de tu estilo de viaje.
+        </p>
+
+        <div class="reveal mt-9 flex flex-col sm:flex-row gap-3.5" style="--d:280ms">
+          <a href="#contact" class="inline-flex justify-center items-center rounded-full bg-white px-7 py-3.5 font-600 text-brand shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all" data-i18n="hero.ctaPrimary">Comienza tu aventura</a>
+          <a href="#services" class="inline-flex justify-center items-center gap-2 rounded-full border border-white/40 bg-white/5 backdrop-blur px-7 py-3.5 font-600 text-white hover:bg-white/15 transition" data-i18n="hero.ctaSecondary">Ver servicios</a>
+        </div>
+
+        <div class="reveal mt-12 flex items-center gap-8 text-white/80" style="--d:380ms">
+          <div>
+            <p class="font-display font-700 text-3xl text-white">+2K</p>
+            <p class="text-xs uppercase tracking-wide" data-i18n="hero.stat1">Viajeros felices</p>
+          </div>
+          <div class="h-10 w-px bg-white/25"></div>
+          <div>
+            <p class="font-display font-700 text-3xl text-white">4.9★</p>
+            <p class="text-xs uppercase tracking-wide" data-i18n="hero.stat2">TripAdvisor</p>
+          </div>
+          <div class="h-10 w-px bg-white/25"></div>
+          <div>
+            <p class="font-display font-700 text-3xl text-white">100%</p>
+            <p class="text-xs uppercase tracking-wide" data-i18n="hero.stat3">A tu estilo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#about" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition floaty" aria-label="Scroll">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
+  </section>
+
+  <!-- ===================== MARQUEE ===================== -->
+  <div class="marquee bg-brand text-white py-3.5 overflow-hidden whitespace-nowrap">
+    <div class="marquee-track inline-flex gap-10 text-sm font-600 uppercase tracking-widest">
+      <script>/* filled by JS for i18n */</script>
+    </div>
+  </div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal relative">
+        <div class="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-brand-100 -z-10 floaty"></div>
+        <img src="https://images.unsplash.com/photo-1541637593725-923467404d17?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+             alt="Viajeros en Perú" class="rounded-3xl shadow-xl w-full object-cover aspect-[4/5]" />
+        <div class="absolute -bottom-6 -right-4 sm:-right-6 bg-white rounded-2xl shadow-lg p-5 max-w-[200px] border border-slate-50">
+          <p class="font-display font-700 text-brand text-2xl">Perú 🇵🇪</p>
+          <p class="text-sm text-slate-500 mt-1" data-i18n="about.card">Cusco · Arequipa · Lima · Puno y más</p>
+        </div>
+      </div>
+
+      <div>
+        <span class="reveal text-brand font-600 text-sm uppercase tracking-widest" data-i18n="about.kicker">Quiénes somos</span>
+        <h2 class="reveal mt-3 font-display font-700 text-slate-900 text-4xl sm:text-5xl leading-tight" style="--d:60ms" data-i18n="about.title">
+          Viajar acompañado se siente distinto
+        </h2>
+        <p class="reveal mt-6 text-lg leading-relaxed text-slate-600" style="--d:120ms" data-i18n="about.p1">
+          Hola viajeros. Somos una agencia de viajes en Perú y, como dice nuestro nombre, somos tus amigos viajeros. Te ayudamos a encontrar tu team ideal y a crear experiencias increíbles según tu estilo de viaje.
+        </p>
+        <p class="reveal mt-4 text-lg leading-relaxed text-slate-600" style="--d:180ms" data-i18n="about.p2">
+          Nada de tours genéricos: escuchamos cómo te gusta viajar y armamos todo a tu medida, desde el primer vuelo hasta el último atardecer.
+        </p>
+
+        <div class="reveal mt-8 grid grid-cols-2 gap-4" style="--d:240ms">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand text-lg">✓</span>
+            <p class="text-sm font-500 text-slate-700" data-i18n="about.f1">Experiencias a tu medida</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand text-lg">♥</span>
+            <p class="text-sm font-500 text-slate-700" data-i18n="about.f2">Trato cercano y honesto</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand text-lg">◎</span>
+            <p class="text-sm font-500 text-slate-700" data-i18n="about.f3">Expertos locales en Perú</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand text-lg">✈</span>
+            <p class="text-sm font-500 text-slate-700" data-i18n="about.f4">Todo en un solo lugar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section id="services" class="py-24 sm:py-32 bg-slate-50">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="reveal text-brand font-600 text-sm uppercase tracking-widest" data-i18n="services.kicker">Qué hacemos</span>
+        <h2 class="reveal mt-3 font-display font-700 text-slate-900 text-4xl sm:text-5xl" style="--d:60ms" data-i18n="services.title">Todo tu viaje, resuelto</h2>
+        <p class="reveal mt-4 text-lg text-slate-600" style="--d:120ms" data-i18n="services.subtitle">Cinco servicios para que tú solo te preocupes por disfrutar.</p>
+      </div>
+
+      <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- card -->
+        <article class="reveal group bg-white rounded-3xl p-8 border border-slate-100 hover:border-brand/30 hover:shadow-xl transition-all duration-300">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand text-2xl group-hover:bg-brand group-hover:text-white transition-colors">🗺️</div>
+          <h3 class="mt-6 font-display font-600 text-xl text-slate-900" data-i18n="services.s1t">Programa de viaje</h3>
+          <p class="mt-2.5 text-slate-600 leading-relaxed" data-i18n="services.s1d">Itinerarios personalizados de principio a fin, pensados para tu ritmo y presupuesto.</p>
+        </article>
+
+        <article class="reveal group bg-white rounded-3xl p-8 border border-slate-100 hover:border-brand/30 hover:shadow-xl transition-all duration-300" style="--d:80ms">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand text-2xl group-hover:bg-brand group-hover:text-white transition-colors">🏨</div>
+          <h3 class="mt-6 font-display font-600 text-xl text-slate-900" data-i18n="services.s2t">Reserva de alojamiento</h3>
+          <p class="mt-2.5 text-slate-600 leading-relaxed" data-i18n="services.s2d">Hospedajes seleccionados, desde hostales con encanto hasta hoteles boutique.</p>
+        </article>
+
+        <article class="reveal group bg-white rounded-3xl p-8 border border-slate-100 hover:border-brand/30 hover:shadow-xl transition-all duration-300" style="--d:160ms">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand text-2xl group-hover:bg-brand group-hover:text-white transition-colors">🥾</div>
+          <h3 class="mt-6 font-display font-600 text-xl text-slate-900" data-i18n="services.s3t">Tours</h3>
+          <p class="mt-2.5 text-slate-600 leading-relaxed" data-i18n="services.s3d">Experiencias guiadas por expertos locales que conocen cada rincón del Perú.</p>
+        </article>
+
+        <article class="reveal group bg-white rounded-3xl p-8 border border-slate-100 hover:border-brand/30 hover:shadow-xl transition-all duration-300" style="--d:80ms">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand text-2xl group-hover:bg-brand group-hover:text-white transition-colors">✈️</div>
+          <h3 class="mt-6 font-display font-600 text-xl text-slate-900" data-i18n="services.s4t">Boletos de avión</h3>
+          <p class="mt-2.5 text-slate-600 leading-relaxed" data-i18n="services.s4d">Encontramos las mejores rutas y tarifas para que llegues sin complicaciones.</p>
+        </article>
+
+        <article class="reveal group bg-white rounded-3xl p-8 border border-slate-100 hover:border-brand/30 hover:shadow-xl transition-all duration-300" style="--d:160ms">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand text-2xl group-hover:bg-brand group-hover:text-white transition-colors">🚐</div>
+          <h3 class="mt-6 font-display font-600 text-xl text-slate-900" data-i18n="services.s5t">Servicio de transfer</h3>
+          <p class="mt-2.5 text-slate-600 leading-relaxed" data-i18n="services.s5d">Traslados puntuales y seguros del aeropuerto a tu destino y entre ciudades.</p>
+        </article>
+
+        <!-- CTA card -->
+        <article class="reveal relative overflow-hidden bg-brand rounded-3xl p-8 text-white flex flex-col justify-between" style="--d:240ms">
+          <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10 floaty"></div>
+          <div>
+            <h3 class="font-display font-600 text-xl" data-i18n="services.ctaTitle">¿No sabes por dónde empezar?</h3>
+            <p class="mt-2.5 text-white/85 leading-relaxed" data-i18n="services.ctaDesc">Cuéntanos tu estilo de viaje y armamos una propuesta para ti, sin compromiso.</p>
+          </div>
+          <a href="#contact" class="mt-6 inline-flex items-center gap-2 rounded-full bg-white text-brand font-600 px-5 py-2.5 w-max hover:gap-3 transition-all" data-i18n="services.ctaBtn">Hablar con un amigo →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TRAVEL STYLES ===================== -->
+  <section id="styles" class="py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="max-w-2xl">
+        <span class="reveal text-brand font-600 text-sm uppercase tracking-widest" data-i18n="styles.kicker">Tu estilo, tu viaje</span>
+        <h2 class="reveal mt-3 font-display font-700 text-slate-900 text-4xl sm:text-5xl" style="--d:60ms" data-i18n="styles.title">¿Cómo te gusta viajar?</h2>
+        <p class="reveal mt-4 text-lg text-slate-600" style="--d:120ms" data-i18n="styles.subtitle">Elige tu vibra y encontramos el team perfecto para ti.</p>
+      </div>
+
+      <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="reveal group relative rounded-3xl overflow-hidden aspect-[3/4] shadow-md">
+          <img src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=1740&auto=format&fit=crop" alt="" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 p-5 text-white">
+            <p class="font-display font-600 text-xl" data-i18n="styles.a1t">Aventura</p>
+            <p class="text-sm text-white/80" data-i18n="styles.a1d">Trekking, montañas y adrenalina.</p>
+          </div>
+        </div>
+        <div class="reveal group relative rounded-3xl overflow-hidden aspect-[3/4] shadow-md" style="--d:80ms">
+          <img src="https://images.unsplash.com/photo-1489493887464-892be6d1daae?q=80&w=1740&auto=format&fit=crop" alt="" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 p-5 text-white">
+            <p class="font-display font-600 text-xl" data-i18n="styles.a2t">Cultural</p>
+            <p class="text-sm text-white/80" data-i18n="styles.a2d">Historia, ruinas y tradición.</p>
+          </div>
+        </div>
+        <div class="reveal group relative rounded-3xl overflow-hidden aspect-[3/4] shadow-md" style="--d:160ms">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1740&auto=format&fit=crop" alt="" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 p-5 text-white">
+            <p class="font-display font-600 text-xl" data-i18n="styles.a3t">Gastronómico</p>
+            <p class="text-sm text-white/80" data-i18n="styles.a3d">Sabores del Perú de norte a sur.</p>
+          </div>
+        </div>
+        <div class="reveal group relative rounded-3xl overflow-hidden aspect-[3/4] shadow-md" style="--d:240ms">
+          <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1740&auto=format&fit=crop" alt="" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 p-5 text-white">
+            <p class="font-display font-600 text-xl" data-i18n="styles.a4t">Relax</p>
+            <p class="text-sm text-white/80" data-i18n="styles.a4d">Paisajes tranquilos y descanso.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GALLERY ===================== -->
+  <section id="gallery" class="py-24 sm:py-32 bg-slate-50">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="reveal text-brand font-600 text-sm uppercase tracking-widest" data-i18n="gallery.kicker">Momentos</span>
+        <h2 class="reveal mt-3 font-display font-700 text-slate-900 text-4xl sm:text-5xl" style="--d:60ms" data-i18n="gallery.title">Perú en imágenes</h2>
+      </div>
+
+      <div class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=1887&auto=format&fit=crop" alt="" class="reveal rounded-2xl object-cover h-full w-full aspect-square hover:brightness-90 transition" />
+        <img src="https://images.unsplash.com/photo-1542828962-7dc2e0378c32?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="reveal rounded-2xl object-cover h-full w-full aspect-square hover:brightness-90 transition lg:mt-8" style="--d:80ms" />
+        <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=2070&auto=format&fit=crop" alt="" class="reveal rounded-2xl object-cover h-full w-full aspect-square hover:brightness-90 transition" style="--d:160ms" />
+        <img src="https://images.unsplash.com/photo-1531065208531-4036c0dba3ca?q=80&w=1887&auto=format&fit=crop" alt="" class="reveal rounded-2xl object-cover h-full w-full aspect-square hover:brightness-90 transition lg:mt-8" style="--d:240ms" />
+      </div>
+
+      <div class="mt-10 text-center">
+        <a href="https://www.instagram.com/teamviajeroperu" target="_blank" rel="noopener" class="reveal inline-flex items-center gap-2 rounded-full border border-brand text-brand font-600 px-6 py-3 hover:bg-brand hover:text-white transition">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.37 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .37-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.17-.4-.37-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.37 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.07-.9.04-1.4.2-1.7.32-.4.17-.7.37-1 .67-.3.3-.5.6-.67 1-.12.3-.28.8-.32 1.7C3.5 8.5 3.5 8.9 3.5 12s0 3.5.07 4.7c.04.9.2 1.4.32 1.7.17.4.37.7.67 1 .3.3.6.5 1 .67.3.12.8.28 1.7.32 1.3.06 1.6.07 4.7.07s3.5 0 4.7-.07c.9-.04 1.4-.2 1.7-.32.4-.17.7-.37 1-.67.3-.3.5-.6.67-1 .12-.3.28-.8.32-1.7.06-1.3.07-1.6.07-4.7s0-3.5-.07-4.7c-.04-.9-.2-1.4-.32-1.7a2.7 2.7 0 0 0-.67-1 2.7 2.7 0 0 0-1-.67c-.3-.12-.8-.28-1.7-.32C15.5 4 15.1 4 12 4zm0 3.06A4.94 4.94 0 1 0 12 17a4.94 4.94 0 0 0 0-9.88zm0 8.14A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4zm6.3-8.34a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>
+          <span data-i18n="gallery.follow">Síguenos en Instagram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIAL ===================== -->
+  <section class="py-24 sm:py-32">
+    <div class="mx-auto max-w-4xl px-5 sm:px-8 text-center">
+      <div class="reveal flex justify-center gap-1 text-brand" aria-label="5 / 5">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+      <p class="reveal mt-4 font-display font-700 text-2xl sm:text-3xl text-brand uppercase tracking-wide" style="--d:40ms" data-i18n="testi.title">La mejor experiencia</p>
+      <blockquote class="reveal mt-5 font-sans font-400 text-lg sm:text-xl leading-relaxed text-slate-600" style="--d:80ms" data-i18n="testi.quote">
+        Hola, a quien lo lea! Quiero recomendar y garantizar la maravillosa experiencia que tuve programando todos mis tours con esta agencia. Resalto la increíble atención que tuve por parte de su personal, en especial de Nicol, así mismo, la programación, puntualidad, profesionalismo de cada tour y de sus guías. Si hablamos de precio-calidad, son los mejores del mercado. Superó todas mis expectativas y desde el primer día solo debes preocuparte por disfrutar y conocer al máximo. Una agencia que no solo se limita a vender un paquete, si no, que te ayuda con dudas extraoficiales, está atenta a tus requerimientos y te responde en cualquier horario. No pude escoger una mejor agencia. Gracias, team Viajeros. 🫶
+      </blockquote>
+      <div class="reveal mt-8 flex items-center justify-center gap-3" style="--d:160ms">
+        <span class="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand ring-1 ring-brand/10">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+        </span>
+        <div class="text-left">
+          <p class="font-600 text-slate-900">Maria Alejandra V</p>
+          <p class="text-sm text-slate-500" data-i18n="testi.role">TripAdvisor · mar. 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT / CTA ===================== -->
+  <section id="contact" class="py-24 sm:py-32 bg-brand relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/5 floaty"></div>
+    <div class="absolute -bottom-24 -left-16 w-80 h-80 rounded-full bg-white/5"></div>
+
+    <div class="relative mx-auto max-w-5xl px-5 sm:px-8 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="text-white">
+        <h2 class="reveal font-display font-700 text-4xl sm:text-5xl leading-tight" data-i18n="contact.title">Empecemos a planear tu viaje</h2>
+        <p class="reveal mt-5 text-lg text-white/85 leading-relaxed" style="--d:80ms" data-i18n="contact.subtitle">Cuéntanos a dónde sueñas ir y cómo te gusta viajar. Te respondemos rapidísimo, como buenos amigos.</p>
+
+        <div class="reveal mt-8 space-y-4" style="--d:160ms">
+          <a href="https://www.instagram.com/teamviajeroperu" target="_blank" rel="noopener" class="flex items-center gap-3 text-white/90 hover:text-white transition">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">📸</span>
+            <span class="font-500">@teamviajeroperu</span>
+          </a>
+          <a href="https://www.facebook.com/teamviajeroperu" target="_blank" rel="noopener" class="flex items-center gap-3 text-white/90 hover:text-white transition">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">👍</span>
+            <span class="font-500">facebook.com/teamviajeroperu</span>
+          </a>
+          <a href="https://wa.me/51999999999?text=Hola%20Team%20Viajero%20Per%C3%BA%2C%20quiero%20planear%20un%20viaje%20%E2%9C%A8" target="_blank" rel="noopener" class="flex items-center gap-3 text-white/90 hover:text-white transition">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.13-1.47-.72-1.69-.8-.23-.09-.39-.13-.56.12-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42-.14 0-.31-.02-.47-.02-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.25 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
+            </span>
+            <span class="font-500">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <form class="reveal bg-white rounded-3xl p-7 sm:p-8 shadow-2xl" style="--d:120ms" onsubmit="event.preventDefault(); this.reset(); document.getElementById('formOk').classList.remove('hidden');">
+        <div class="grid gap-4">
+          <div>
+            <label class="text-sm font-600 text-slate-700" data-i18n="contact.fName">Nombre</label>
+            <input required type="text" class="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" />
+          </div>
+          <div>
+            <label class="text-sm font-600 text-slate-700" data-i18n="contact.fEmail">Correo</label>
+            <input required type="email" class="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" />
+          </div>
+          <div>
+            <label class="text-sm font-600 text-slate-700" data-i18n="contact.fMsg">¿Cómo te gusta viajar?</label>
+            <textarea required rows="3" class="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full rounded-xl bg-brand text-white font-600 py-3.5 hover:bg-brand-700 transition" data-i18n="contact.fSubmit">Enviar mensaje</button>
+          <p id="formOk" class="hidden text-center text-sm font-500 text-green-600" data-i18n="contact.fOk">¡Gracias! Te contactaremos muy pronto. ✨</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="bg-slate-900 text-slate-400 py-14">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <a href="#hero" class="flex items-center gap-4">
+          <img src="https://res.cloudinary.com/dmcsf10tz/image/upload/v1787508314/logo/logo2_fhyxsx.png" alt="Team Viajero Perú" class="w-20 object-cover p-0.5 shadow-md" />
+          <p class="text-sm" data-i18n="footer.tag">Tus amigos viajeros 🇵🇪</p>
+        </a>
+
+        <div class="flex items-center gap-4">
+          <a href="https://www.instagram.com/teamviajeroperu" target="_blank" rel="noopener" class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 hover:bg-brand transition text-white" aria-label="Instagram">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.37 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .37-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.17-.4-.37-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.37 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 4.86A4.94 4.94 0 1 0 12 17a4.94 4.94 0 0 0 0-9.88zm0 8.14A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4zm6.3-8.34a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/teamviajeroperu" target="_blank" rel="noopener" class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 hover:bg-brand transition text-white" aria-label="Facebook">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-10 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
+        <p data-i18n="footer.rights">© 2026 Team Viajero Perú. Todos los derechos reservados.</p>
+        <p data-i18n="footer.made">Hecho con ♥ para viajeros.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== WHATSAPP FLOAT ===================== -->
+  <a href="https://wa.me/51999999999?text=Hola%20Team%20Viajero%20Per%C3%BA%2C%20quiero%20planear%20un%20viaje%20%E2%9C%A8"
+     target="_blank" rel="noopener" aria-label="WhatsApp"
+     class="group fixed bottom-5 right-5 z-50 flex items-center gap-2.5 rounded-full bg-[#25D366] text-white pl-4 pr-5 py-3.5 shadow-lg shadow-black/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+    <span class="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40 -z-10"></span>
+    <svg class="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.13-1.47-.72-1.69-.8-.23-.09-.39-.13-.56.12-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42-.14 0-.31-.02-.47-.02-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.25 3.74.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
+    <span class="font-600 text-sm max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-[140px] transition-all duration-300" data-i18n="wa.label">Escríbenos</span>
+  </a>
+
+  <!-- ===================== SCRIPT ===================== -->
+  <script>
+    /* ---------------- i18n dictionary ---------------- */
+    const I18N = {
+      es: {
+        'nav.about':'Nosotros','nav.services':'Servicios','nav.styles':'Estilos','nav.gallery':'Galería','nav.contact':'Contacto','nav.cta':'Planea tu viaje',
+        'hero.badge':'✦ Solo para viajeros','hero.title1':'Somos tus','hero.title2':'amigos viajeros',
+        'hero.subtitle':'Encontramos tu team ideal y creamos experiencias increíbles en Perú, diseñadas a la medida de tu estilo de viaje.',
+        'hero.ctaPrimary':'Comienza tu aventura','hero.ctaSecondary':'Ver servicios',
+        'hero.stat1':'Viajeros felices','hero.stat2':'TripAdvisor','hero.stat3':'A tu estilo',
+        'about.kicker':'Quiénes somos','about.title':'Viajar acompañado se siente distinto',
+        'about.p1':'Hola viajeros. Somos una agencia de viajes en Perú y, como dice nuestro nombre, somos tus amigos viajeros. Te ayudamos a encontrar tu team ideal y a crear experiencias increíbles según tu estilo de viaje.',
+        'about.p2':'Nada de tours genéricos: escuchamos cómo te gusta viajar y armamos todo a tu medida, desde el primer vuelo hasta el último atardecer.',
+        'about.f1':'Experiencias a tu medida','about.f2':'Trato cercano y honesto','about.f3':'Expertos locales en Perú','about.f4':'Todo en un solo lugar',
+        'about.card':'Cusco · Arequipa · Lima · Puno y más',
+        'services.kicker':'Qué hacemos','services.title':'Todo tu viaje, resuelto','services.subtitle':'Cinco servicios para que tú solo te preocupes por disfrutar.',
+        'services.s1t':'Programa de viaje','services.s1d':'Itinerarios personalizados de principio a fin, pensados para tu ritmo y presupuesto.',
+        'services.s2t':'Reserva de alojamiento','services.s2d':'Hospedajes seleccionados, desde hostales con encanto hasta hoteles boutique.',
+        'services.s3t':'Tours','services.s3d':'Experiencias guiadas por expertos locales que conocen cada rincón del Perú.',
+        'services.s4t':'Boletos de avión','services.s4d':'Encontramos las mejores rutas y tarifas para que llegues sin complicaciones.',
+        'services.s5t':'Servicio de transfer','services.s5d':'Traslados puntuales y seguros del aeropuerto a tu destino y entre ciudades.',
+        'services.ctaTitle':'¿No sabes por dónde empezar?','services.ctaDesc':'Cuéntanos tu estilo de viaje y armamos una propuesta para ti, sin compromiso.','services.ctaBtn':'Hablar con un amigo →',
+        'styles.kicker':'Tu estilo, tu viaje','styles.title':'¿Cómo te gusta viajar?','styles.subtitle':'Elige tu vibra y encontramos el team perfecto para ti.',
+        'styles.a1t':'Aventura','styles.a1d':'Trekking, montañas y adrenalina.','styles.a2t':'Cultural','styles.a2d':'Historia, ruinas y tradición.',
+        'styles.a3t':'Gastronómico','styles.a3d':'Sabores del Perú de norte a sur.','styles.a4t':'Relax','styles.a4d':'Paisajes tranquilos y descanso.',
+        'gallery.kicker':'Momentos','gallery.title':'Perú en imágenes','gallery.follow':'Síguenos en Instagram',
+        'testi.title':'La mejor experiencia',
+        'testi.quote':'Hola, a quien lo lea! Quiero recomendar y garantizar la maravillosa experiencia que tuve programando todos mis tours con esta agencia. Resalto la increíble atención que tuve por parte de su personal, en especial de Nicol, así mismo, la programación, puntualidad, profesionalismo de cada tour y de sus guías. Si hablamos de precio-calidad, son los mejores del mercado. Superó todas mis expectativas y desde el primer día solo debes preocuparte por disfrutar y conocer al máximo. Una agencia que no solo se limita a vender un paquete, si no, que te ayuda con dudas extraoficiales, está atenta a tus requerimientos y te responde en cualquier horario. No pude escoger una mejor agencia. Gracias, team Viajeros. 🫶',
+        'testi.role':'TripAdvisor · mar. 2026',
+        'contact.title':'Empecemos a planear tu viaje','contact.subtitle':'Cuéntanos a dónde sueñas ir y cómo te gusta viajar. Te respondemos rapidísimo, como buenos amigos.',
+        'contact.fName':'Nombre','contact.fEmail':'Correo','contact.fMsg':'¿Cómo te gusta viajar?','contact.fSubmit':'Enviar mensaje','contact.fOk':'¡Gracias! Te contactaremos muy pronto. ✨',
+        'footer.tag':'Tus amigos viajeros 🇵🇪','footer.rights':'© 2026 Team Viajero Perú. Todos los derechos reservados.','footer.made':'Hecho con ♥ para viajeros.','wa.label':'Escríbenos',
+        'marquee':['Programa de viaje','Reserva de alojamiento','Tours','Boletos de avión','Servicio de transfer','Solo para viajeros']
+      },
+      en: {
+        'nav.about':'About','nav.services':'Services','nav.styles':'Styles','nav.gallery':'Gallery','nav.contact':'Contact','nav.cta':'Plan your trip',
+        'hero.badge':'✦ Only for travelers','hero.title1':'We are your','hero.title2':'traveling friends',
+        'hero.subtitle':'We find your ideal team and create incredible experiences in Peru, tailored to your travel style.',
+        'hero.ctaPrimary':'Start your adventure','hero.ctaSecondary':'See services',
+        'hero.stat1':'Happy travelers','hero.stat2':'TripAdvisor','hero.stat3':'Your style',
+        'about.kicker':'Who we are','about.title':'Traveling with company feels different',
+        'about.p1':"Hi travelers! We're a travel agency in Peru and, as our name says, we're your traveling friends. We help you find your ideal team and create incredible experiences according to your travel style.",
+        'about.p2':'No generic tours: we listen to how you like to travel and build everything to your measure, from the first flight to the last sunset.',
+        'about.f1':'Tailor-made experiences','about.f2':'Close, honest treatment','about.f3':'Local experts in Peru','about.f4':'Everything in one place',
+        'about.card':'Cusco · Arequipa · Lima · Puno & more',
+        'services.kicker':'What we do','services.title':'Your whole trip, sorted','services.subtitle':'Five services so all you do is enjoy.',
+        'services.s1t':'Travel program','services.s1d':'Personalized itineraries from start to finish, built for your pace and budget.',
+        'services.s2t':'Accommodation booking','services.s2d':'Handpicked stays, from charming hostels to boutique hotels.',
+        'services.s3t':'Tours','services.s3d':'Guided experiences with local experts who know every corner of Peru.',
+        'services.s4t':'Airplane tickets','services.s4d':'We find the best routes and fares so you arrive hassle-free.',
+        'services.s5t':'Transfer service','services.s5d':'Punctual, safe transfers from the airport to your destination and between cities.',
+        'services.ctaTitle':"Don't know where to start?",'services.ctaDesc':'Tell us your travel style and we build a proposal for you, no strings attached.','services.ctaBtn':'Talk to a friend →',
+        'styles.kicker':'Your style, your trip','styles.title':'How do you like to travel?','styles.subtitle':'Pick your vibe and we find the perfect team for you.',
+        'styles.a1t':'Adventure','styles.a1d':'Trekking, mountains and adrenaline.','styles.a2t':'Cultural','styles.a2d':'History, ruins and tradition.',
+        'styles.a3t':'Foodie','styles.a3d':'Flavors of Peru from north to south.','styles.a4t':'Relax','styles.a4d':'Calm landscapes and rest.',
+        'gallery.kicker':'Moments','gallery.title':'Peru in pictures','gallery.follow':'Follow us on Instagram',
+        'testi.title':'The best experience',
+        'testi.quote':"Hi, whoever reads this! I want to recommend and vouch for the wonderful experience I had planning all my tours with this agency. I highlight the incredible attention from their staff, especially Nicol, as well as the planning, punctuality and professionalism of every tour and its guides. In terms of value for money, they are the best on the market. It exceeded all my expectations, and from day one all you have to worry about is enjoying and making the most of it. An agency that doesn't just sell you a package, but helps with off-the-record questions, pays attention to your requests and replies at any hour. I couldn't have chosen a better agency. Thank you, team Viajeros. 🫶",
+        'testi.role':'TripAdvisor · Mar. 2026',
+        'contact.title':"Let's start planning your trip",'contact.subtitle':'Tell us where you dream of going and how you like to travel. We reply super fast, like good friends.',
+        'contact.fName':'Name','contact.fEmail':'Email','contact.fMsg':'How do you like to travel?','contact.fSubmit':'Send message','contact.fOk':'Thanks! We\'ll contact you very soon. ✨',
+        'footer.tag':'Your traveling friends 🇵🇪','footer.rights':'© 2026 Team Viajero Perú. All rights reserved.','footer.made':'Made with ♥ for travelers.','wa.label':'Chat with us',
+        'marquee':['Travel program','Accommodation booking','Tours','Airplane tickets','Transfer service','Only for travelers']
+      },
+      pt: {
+        'nav.about':'Sobre','nav.services':'Serviços','nav.styles':'Estilos','nav.gallery':'Galeria','nav.contact':'Contato','nav.cta':'Planeje sua viagem',
+        'hero.badge':'✦ Só para viajantes','hero.title1':'Somos seus','hero.title2':'amigos viajantes',
+        'hero.subtitle':'Encontramos seu team ideal e criamos experiências incríveis no Peru, feitas sob medida para o seu estilo de viagem.',
+        'hero.ctaPrimary':'Comece sua aventura','hero.ctaSecondary':'Ver serviços',
+        'hero.stat1':'Viajantes felizes','hero.stat2':'TripAdvisor','hero.stat3':'No seu estilo',
+        'about.kicker':'Quem somos','about.title':'Viajar acompanhado é diferente',
+        'about.p1':'Olá, viajantes! Somos uma agência de viagens no Peru e, como diz o nosso nome, somos seus amigos viajantes. Ajudamos você a encontrar seu team ideal e a criar experiências incríveis de acordo com o seu estilo de viagem.',
+        'about.p2':'Nada de passeios genéricos: ouvimos como você gosta de viajar e montamos tudo sob medida, do primeiro voo ao último pôr do sol.',
+        'about.f1':'Experiências sob medida','about.f2':'Atendimento próximo e honesto','about.f3':'Especialistas locais no Peru','about.f4':'Tudo num só lugar',
+        'about.card':'Cusco · Arequipa · Lima · Puno e mais',
+        'services.kicker':'O que fazemos','services.title':'Sua viagem inteira, resolvida','services.subtitle':'Cinco serviços para você só se preocupar em aproveitar.',
+        'services.s1t':'Programa de viagem','services.s1d':'Roteiros personalizados do início ao fim, pensados para o seu ritmo e orçamento.',
+        'services.s2t':'Reserva de hospedagem','services.s2d':'Hospedagens selecionadas, de hostels charmosos a hotéis boutique.',
+        'services.s3t':'Tours','services.s3d':'Experiências guiadas por especialistas locais que conhecem cada canto do Peru.',
+        'services.s4t':'Passagens aéreas','services.s4d':'Encontramos as melhores rotas e tarifas para você chegar sem complicação.',
+        'services.s5t':'Serviço de transfer','services.s5d':'Traslados pontuais e seguros do aeroporto ao seu destino e entre cidades.',
+        'services.ctaTitle':'Não sabe por onde começar?','services.ctaDesc':'Conte seu estilo de viagem e montamos uma proposta para você, sem compromisso.','services.ctaBtn':'Falar com um amigo →',
+        'styles.kicker':'Seu estilo, sua viagem','styles.title':'Como você gosta de viajar?','styles.subtitle':'Escolha sua vibe e encontramos o team perfeito para você.',
+        'styles.a1t':'Aventura','styles.a1d':'Trilhas, montanhas e adrenalina.','styles.a2t':'Cultural','styles.a2d':'História, ruínas e tradição.',
+        'styles.a3t':'Gastronômico','styles.a3d':'Sabores do Peru de norte a sul.','styles.a4t':'Relax','styles.a4d':'Paisagens tranquilas e descanso.',
+        'gallery.kicker':'Momentos','gallery.title':'Peru em imagens','gallery.follow':'Siga-nos no Instagram',
+        'testi.title':'A melhor experiência',
+        'testi.quote':'Olá, a quem estiver lendo! Quero recomendar e garantir a maravilhosa experiência que tive ao programar todos os meus passeios com esta agência. Destaco o incrível atendimento da equipe, em especial da Nicol, além da organização, pontualidade e profissionalismo de cada tour e de seus guias. Em relação a custo-benefício, são os melhores do mercado. Superou todas as minhas expectativas e, desde o primeiro dia, você só precisa se preocupar em aproveitar e conhecer ao máximo. Uma agência que não se limita a vender um pacote, mas que ajuda com dúvidas extraoficiais, está atenta às suas necessidades e responde a qualquer hora. Não poderia ter escolhido agência melhor. Obrigada, team Viajeros. 🫶',
+        'testi.role':'TripAdvisor · mar. 2026',
+        'contact.title':'Vamos começar a planejar sua viagem','contact.subtitle':'Conte para onde você sonha ir e como gosta de viajar. Respondemos rapidinho, como bons amigos.',
+        'contact.fName':'Nome','contact.fEmail':'E-mail','contact.fMsg':'Como você gosta de viajar?','contact.fSubmit':'Enviar mensagem','contact.fOk':'Obrigado! Entraremos em contato em breve. ✨',
+        'footer.tag':'Seus amigos viajantes 🇵🇪','footer.rights':'© 2026 Team Viajero Perú. Todos os direitos reservados.','footer.made':'Feito com ♥ para viajantes.','wa.label':'Fale conosco',
+        'marquee':['Programa de viagem','Reserva de hospedagem','Tours','Passagens aéreas','Serviço de transfer','Só para viajantes']
+      }
+    };
+
+    const LANG_LABEL = { es:'ES', en:'EN', pt:'PT' };
+
+    function applyLang(lang){
+      const dict = I18N[lang] || I18N.es;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(dict[key] !== undefined) el.textContent = dict[key];
+      });
+      // marquee
+      const track = document.querySelector('.marquee-track');
+      const items = dict['marquee'];
+      const one = items.map(t=>`<span>✦ ${t}</span>`).join('');
+      track.innerHTML = one + one; // duplicate for seamless loop
+      document.documentElement.lang = lang;
+      document.getElementById('langCurrent').textContent = LANG_LABEL[lang];
+      localStorage.setItem('tv_lang', lang);
+    }
+
+    /* ---------------- Language switcher UI ---------------- */
+    const langBtn = document.getElementById('langBtn');
+    const langMenu = document.getElementById('langMenu');
+    langBtn.addEventListener('click', e=>{ e.stopPropagation(); langMenu.classList.toggle('hidden'); });
+    document.addEventListener('click', ()=> langMenu.classList.add('hidden'));
+    document.querySelectorAll('.lang-opt').forEach(opt=>{
+      opt.addEventListener('click', ()=>{ applyLang(opt.dataset.lang); langMenu.classList.add('hidden'); });
+    });
+
+    /* ---------------- Mobile menu ---------------- */
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.add('hidden')));
+
+    /* ---------------- Header shrink on scroll ---------------- */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', ()=>{
+      if(window.scrollY > 20) navbar.classList.add('shadow-md','!py-2');
+      else navbar.classList.remove('shadow-md','!py-2');
+    });
+
+    /* ---------------- Scroll reveal ---------------- */
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    /* ---------------- Init ---------------- */
+    const saved = localStorage.getItem('tv_lang');
+    const browser = (navigator.language||'es').slice(0,2);
+    applyLang(saved || (['es','en','pt'].includes(browser) ? browser : 'es'));
+  </script>
+</body>
+</html>
